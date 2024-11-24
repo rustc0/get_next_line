@@ -36,8 +36,9 @@ char	*getbuff(int fd, char *buff)
 		if (ft_strchr(buff, '\n'))
 			break ;
 	}
-	free(tmp);
-	return (buff);
+	if (nbytes <= 0 && !(*buff))
+		return (NULL);
+	return (free(tmp), buff);
 }
 
 char	*ext_line(char *buff)
@@ -98,18 +99,20 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int main(void)
-{
-	int fd = open("gg", O_RDWR , 0777);
+// int main(void)
+// {
+// 	int fd = open("gg", O_RDWR , 0777);
 
-	char *line = get_next_line(fd);
-	char *line2 = get_next_line(fd);
+// 	char *line = get_next_line(fd);
+// 	char *line2 = get_next_line(fd);
+// 	char *line3 = get_next_line(fd);
+// 	char *line4 = get_next_line(fd);
 
 
-	printf("first :%s\n second :%s", line, line2);
+// 	printf("first :%ssecond :%sthird :%sfourth :%s", line, line2, line3, line4);
 
-	free(line);
-	free(line2);
-	close(fd);
-	return 0;
-}
+// 	free(line);
+// 	free(line2);
+// 	close(fd);
+// 	return 0;
+// }
