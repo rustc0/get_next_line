@@ -14,27 +14,29 @@
 
 char	*getbuff(int fd, char *buff)
 {
-	char	tmp[BUFFER_SIZE + 1];
+	char	*tmp;
 	char	*tbuff;
 	ssize_t	nbytes;
 
-	nbytes = read(fd, tmp, BUFFER_SIZE);
+	nbytes = 1;
+	tmp = malloc(BUFFER_SIZE + 1);
+	if (!tmp)
+		return (NULL);
 	while (nbytes > 0)
 	{
+		nbytes = read(fd, tmp, BUFFER_SIZE);
+		if (nbytes <= 0)
+			break ;
 		tmp[nbytes] = 0;
 		tbuff = ft_strjoin(buff, tmp);
 		free(buff);
 		buff = tbuff;
 		if (!buff)
-		{
-			free(buff);
-			return (NULL);
-		}
+			return (free(tmp), free(buff), NULL);
 		if (ft_strchr(buff, '\n'))
 			break ;
 	}
-	if (nbytes < 0 || (nbytes == 0 && !buff))
-		return (free(buff), NULL);
+	free(tmp);
 	return (buff);
 }
 
@@ -101,10 +103,13 @@ int main(void)
 	int fd = open("gg", O_RDWR , 0777);
 
 	char *line = get_next_line(fd);
+	char *line2 = get_next_line(fd);
 
-	printf("first :%s", line);
+
+	printf("first :%s\n second :%s", line, line2);
 
 	free(line);
+	free(line2);
 	close(fd);
 	return 0;
 }
