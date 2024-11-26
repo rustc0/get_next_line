@@ -16,64 +16,55 @@ size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
+	if (!str)
+		return (0);
 	i = 0;
 	while (str[i])
 		i++;
 	return (i);
 }
 
-char	*ft_strdup(const char *str)
+int	ft_strchr(char *s, int c)
 {
-	size_t	len;
-	int		i;
-	char	*s;
+	int	i;
 
 	i = 0;
-	len = ft_strlen(str);
-	s = (char *)malloc(len + 1 * sizeof(char));
-	if (!s)
-		return (NULL);
-	while (str[i])
+	while (s[i])
 	{
-		s[i] = str[i];
+		if (c == s[i])
+			return (1);
 		i++;
 	}
-	s[i] = '\0';
-	return (s);
+	return (0);
 }
 
-char	*ft_strchr(const char *str, int c)
+char	*ft_strjoin(char *buff, char *tmp)
 {
-	unsigned char	ch;
+	char	*str;
+	size_t	buff_len;
+	size_t	tmp_len;
 
-	ch = (unsigned char)c;
-	while (*str)
-	{
-		if (*str == ch)
-			return ((char *)str);
-		str++;
-	}
-	if (ch == '\0')
-		return ((char *)str);
-	return (NULL);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	s1len;
-	size_t	s2len;
-	char	*buff;
-
-	if (!s1 && !s2)
+	if (tmp == NULL)
 		return (NULL);
-	s1len = ft_strlen(s1);
-	s2len = ft_strlen(s2);
-	buff = (char *)(malloc(s1len + s2len + 1));
 	if (!buff)
+	{
+		buff = (char *)malloc(1);
+		if (!buff)
+			return (NULL);
+		buff[0] = '\0';
+	}
+	buff_len = ft_strlen(buff);
+	tmp_len = ft_strlen(tmp);
+	str = malloc(buff_len + tmp_len + 1);
+	if (str == NULL)
+	{
+		free(buff);
 		return (NULL);
-	ft_strncpy(buff, s1, s1len);
-	ft_strncpy(buff + s1len, s2, s2len);
-	return (buff);
+	}
+	ft_strncpy(str, buff, buff_len);
+	ft_strncpy(str + buff_len, tmp, tmp_len);
+	free(buff);
+	return (str);
 }
 
 char	*ft_strncpy(char *dest, const char *src, size_t num)

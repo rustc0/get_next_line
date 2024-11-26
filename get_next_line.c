@@ -15,30 +15,22 @@
 char	*getbuff(int fd, char *buff)
 {
 	char	*tmp;
-	char	*tbuff;
 	ssize_t	nbytes;
 
-	nbytes = 1;
 	tmp = malloc(BUFFER_SIZE + 1);
 	if (!tmp)
 		return (NULL);
-	while (nbytes > 0)
+	nbytes = 1;
+	while (nbytes > 0 && (!buff || !ft_strchr(buff, '\n')))
 	{
 		nbytes = read(fd, tmp, BUFFER_SIZE);
-		if (nbytes <= 0)
-			break ;
 		tmp[nbytes] = 0;
-		tbuff = ft_strjoin(buff, tmp);
-		free(buff);
-		buff = tbuff;
-		if (!buff)
-			return (free(tmp), free(buff), NULL);
-		if (ft_strchr(buff, '\n'))
-			break ;
+		buff = ft_strjoin(buff, tmp);
 	}
-	if (nbytes <= 0 && !(*buff))
-		return (NULL);
-	return (free(tmp), buff);
+	if (nbytes == -1)
+		return (free(buff), free(tmp), NULL);
+	free(tmp);
+	return (buff);
 }
 
 char	*ext_line(char *buff)
@@ -46,6 +38,8 @@ char	*ext_line(char *buff)
 	int		i;
 	char	*line;
 
+	if (!*buff)
+		return (NULL);
 	i = 0;
 	while (buff[i] && buff[i] != '\n')
 		i++;
@@ -58,21 +52,22 @@ char	*ext_line(char *buff)
 
 char	*updatebuff(char *buff)
 {
+	int		i;
 	char	*nbuff;
-	char	*nl_pos;
 
-	nl_pos = ft_strchr(buff, '\n');
-	if (!nl_pos)
+	i = 0;
+	while (buff[i] && buff[i] != '\n')
+		i++;
+	if (!buff[i])
 	{
 		free(buff);
 		return (NULL);
 	}
-	nbuff = ft_strdup(nl_pos + 1);
+	nbuff = malloc(ft_strlen(buff) - i + 1);
 	if (!nbuff)
-	{
-		free(buff);
 		return (NULL);
-	}
+	i++;
+	ft_strncpy(nbuff, buff + i, ft_strlen(buff + i));
 	free(buff);
 	return (nbuff);
 }
@@ -85,16 +80,11 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!buff)
-		buff = ft_strdup("");
+		buff = 0;
 	buff = getbuff(fd, buff);
 	if (!buff)
 		return (NULL);
 	line = ext_line(buff);
-	if (!line)
-	{
-		free(buff);
-		return (NULL);
-	}
 	buff = updatebuff(buff);
 	return (line);
 }
@@ -102,17 +92,15 @@ char	*get_next_line(int fd)
 // int main(void)
 // {
 // 	int fd = open("gg", O_RDWR , 0777);
+// 	int i = 0;
 
-// 	char *line = get_next_line(fd);
-// 	char *line2 = get_next_line(fd);
-// 	char *line3 = get_next_line(fd);
-// 	char *line4 = get_next_line(fd);
-
-
-// 	printf("first :%ssecond :%sthird :%sfourth :%s", line, line2, line3, line4);
-
-// 	free(line);
-// 	free(line2);
+// 	while (i < 4)
+// 	{
+// 		char *line = get_next_line(fd);
+// 		printf("line :%s\n", line);
+// 		free(line);
+// 		i++;
+// 	}
 // 	close(fd);
 // 	return 0;
 // }
