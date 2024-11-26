@@ -79,8 +79,6 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!buff)
-		buff = 0;
 	buff = getbuff(fd, buff);
 	if (!buff)
 		return (NULL);
@@ -94,7 +92,7 @@ char	*get_next_line(int fd)
 // 	int fd = open("gg", O_RDWR , 0777);
 // 	int i = 0;
 
-// 	while (i < 4)
+// 	while (i < 6)
 // 	{
 // 		char *line = get_next_line(fd);
 // 		printf("line :%s\n", line);
