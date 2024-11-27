@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinsakai <jinsakai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 23:41:21 by rahmoham          #+#    #+#             */
-/*   Updated: 2024/11/27 15:26:16 by jinsakai         ###   ########.fr       */
+/*   Created: 2024/11/27 06:49:59 by jinsakai          #+#    #+#             */
+/*   Updated: 2024/11/27 15:15:37 by jinsakai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*getbuff(int fd, char *buff)
 {
@@ -74,44 +74,36 @@ char	*updatebuff(char *buff)
 
 char	*get_next_line(int fd)
 {
-	static char	*buff;
+	static char	*buff[1024];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buff = getbuff(fd, buff);
-	if (!buff)
+	buff[fd] = getbuff(fd, buff[fd]);
+	if (!buff[fd])
 		return (NULL);
-	line = ext_line(buff);
-	buff = updatebuff(buff);
+	line = ext_line(buff[fd]);
+	buff[fd] = updatebuff(buff[fd]);
 	return (line);
 }
 
-// int main(void)
-// {
-// 	int fd = open("dirtst", O_RDONLY);
-// 	// int ffd = open("ff", O_RDWR);
+/*int main(void)
+{
+	int fd = open("gg", O_RDWR , 0777);
+	int ffd = open("ff", O_RDWR , 0777);
 
-// 	if (fd == -1)
-// 		printf("failed\n");
+	char *line = get_next_line(fd);
+	printf("line :%s\n", line);
+	free(line);
 
-// 	char *line = get_next_line(fd);
-// 	printf("gg 1: %s", line);
-// 	free(line);
+	char *ffline = get_next_line(ffd);
+	printf("ffline :%s", ffline);
+	free(ffline);
 
-// 	// char *ffline = get_next_line(ffd);
-// 	// printf("ff 1:%s", ffline);
-// 	// free(ffline);
-
-// 	// line = get_next_line(fd);
-// 	// printf("gg 2: %s", line);
-// 	// free(line);
-
-// 	// ffline = get_next_line(ffd);
-// 	// printf("ff 2:%s", ffline);
-// 	// free(ffline);
-
-// 	close(fd);
-// 	// close(ffd);
-// 	return 0;
-// }
+	line = get_next_line(fd);
+	printf("line :%s\n", line);
+	free(line);
+	
+	close(fd);
+	return 0;
+}*/
