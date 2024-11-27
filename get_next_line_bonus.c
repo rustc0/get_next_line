@@ -17,11 +17,11 @@ char	*getbuff(int fd, char *buff)
 	char	*tmp;
 	ssize_t	nbytes;
 
-	tmp = malloc(BUFFER_SIZE + 1);
+	tmp = malloc((size_t)BUFFER_SIZE + 1);
 	if (!tmp)
 		return (NULL);
 	nbytes = 1;
-	while (nbytes > 0 && (!buff || !ft_strchr(buff, '\n')))
+	while (nbytes > 0 && !ft_strchr(buff, '\n'))
 	{
 		nbytes = read(fd, tmp, BUFFER_SIZE);
 		tmp[nbytes] = 0;
@@ -86,24 +86,3 @@ char	*get_next_line(int fd)
 	buff[fd] = updatebuff(buff[fd]);
 	return (line);
 }
-
-/*int main(void)
-{
-	int fd = open("gg", O_RDWR , 0777);
-	int ffd = open("ff", O_RDWR , 0777);
-
-	char *line = get_next_line(fd);
-	printf("line :%s\n", line);
-	free(line);
-
-	char *ffline = get_next_line(ffd);
-	printf("ffline :%s", ffline);
-	free(ffline);
-
-	line = get_next_line(fd);
-	printf("line :%s\n", line);
-	free(line);
-	
-	close(fd);
-	return 0;
-}*/
